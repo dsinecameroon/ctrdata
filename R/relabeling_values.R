@@ -1,5 +1,4 @@
 # ----------------------------- CTR ----------------------------------
-
 #' Relabel values in CTR dataframe using a list of value-label pairs.
 #'
 #' @export
