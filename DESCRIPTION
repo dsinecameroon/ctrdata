@@ -11,3 +11,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 LazyData: true
 Imports: dplyr, readxl, writexl, stringr, stringi, jsonlite, httr, lubridate, data.table, rlang
+URL: https://github.com/VOICE-TONE/ctrdata
+BugReports: https://github.com/VOICE-TONE/ctrdata/issues
