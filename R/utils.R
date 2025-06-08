@@ -1,7 +1,7 @@
 # -------------------------- Utility Functions ---------------------------
 
 #' Load Excel file through a temporary path to handle permissions or long paths.
-#'
+#' @export
 #' @param path Path to Excel file.
 #' @param ... Additional arguments to pass to read_excel.
 #' @return A data.frame.
@@ -15,7 +15,7 @@ temp_loader <- function(path, ...){
 }
 
 #' Upload a data.frame to a specified path using a temporary file.
-#'
+#' @export
 #' @param df The data frame to save.
 #' @param path Destination file path.
 temp_uploader <- function(df, path){
@@ -26,7 +26,7 @@ temp_uploader <- function(df, path){
 }
 
 #' Create directory path recursively if it doesn't exist.
-#'
+#' @export
 #' @param full_path Full path to create.
 create_path <- function(full_path){
   if (!dir.exists(full_path)) {
@@ -35,7 +35,7 @@ create_path <- function(full_path){
 }
 
 #' Split data by a month column and save anonymized data.
-#'
+#' @export
 #' @param df Data frame to split and save.
 #' @param month_var Column name representing year-month.
 #' @param path Base path to save data.
