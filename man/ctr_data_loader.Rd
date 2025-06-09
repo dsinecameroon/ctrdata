@@ -27,6 +27,6 @@ df <- ctr_data_loader(
   start_date = "2025-05-01",
   end_date = "2025-05-31"
 )
-head(df)
+head(tibble::as_tibble(df))
 
 }
