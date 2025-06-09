@@ -27,6 +27,6 @@ ctr_data_loader <- function(path=".", start_date=NULL, end_date=NULL){
     }
   }
   df_final <- data.table::rbindlist(df_list, fill = T)
-  df_final <- df_final %>% dplyr::filter(between(as.Date(date_survey), as.Date(start_date), as.Date(end_date)))
+  df_final <- df_final %>% dplyr::filter(dplyr::between(as.Date(date_survey), as.Date(start_date), as.Date(end_date)))
   return(df_final)
 }
