@@ -14,7 +14,7 @@ relabeling_values_ctr_df <- function(df, choices_list, lang=c("french", "english
       print(paste("starting on", nam))
 
       choices_df <- choices_list[[nam]] %>% as_tibble()
-      choices_df <- choices_df %>% select(matches(paste0("value|", lang)))
+      choices_df <- choices_df %>% dplyr::select(dplyr::matches(paste0("value|", lang)))
 
       input_values <- paste0("\\b", choices_df[["value"]], "\\b")
       input_labels <- paste0(choices_df[[lang]], ";")

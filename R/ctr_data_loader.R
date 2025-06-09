@@ -11,7 +11,7 @@ ctr_data_loader <- function(path=".", start_date=NULL, end_date=NULL){
     folder_list <- list.files(paste0(path, "/"), pattern = "data_anon.xlsx", recursive = T,  full.names = T)
     df_list <- lapply(folder_list, temp_loader)
   } else {
-    if((str_detect(start_date, "\\d{4}(-|:|/)\\d{2}(-|:|/)\\d{2}") & str_detect(end_date, "\\d{4}(-|:|/)\\d{2}(-|:|/)\\d{2}"))){
+    if((stringr::str_detect(start_date, "\\d{4}(-|:|/)\\d{2}(-|:|/)\\d{2}") & str_detect(end_date, "\\d{4}(-|:|/)\\d{2}(-|:|/)\\d{2}"))){
       start_year = lubridate::year(start_date)
       end_year =  lubridate::year(end_date)
       if(start_date>end_date) stop("Start Date Cannot be greater than end Date.")
@@ -27,7 +27,6 @@ ctr_data_loader <- function(path=".", start_date=NULL, end_date=NULL){
     }
   }
   df_final <- data.table::rbindlist(df_list, fill = T)
-  df_final <- df_final %>% filter(between(as.Date(date_survey), as.Date(start_date), as.Date(end_date)))
+  df_final <- df_final %>% dplyr::filter(between(as.Date(date_survey), as.Date(start_date), as.Date(end_date)))
   return(df_final)
 }
-

@@ -10,11 +10,11 @@ ctr_dates_reconciliation <- function(data, date_field){
   pattern2 = paste0("(?=.*timestamp)","(?!.*timestamp$)")
   other_date_var <- names(data)[grepl(pattern2, names(data), perl = TRUE)]
 
-  data <- data %>% mutate(across(matches("timestamp"),  ~as.POSIXct(.x, format = "%Y-%m-%d %H:%M:%S")))
+  data <- data %>% dplyr::mutate(across(matches("timestamp"),  ~as.POSIXct(.x, format = "%Y-%m-%d %H:%M:%S")))
 
   for(i in seq_along(main_date_var)){
     data <- data %>%
-      mutate(!!rlang::sym(main_date_var[i]) := if_else(!is.na(!!rlang::sym(main_date_var[i])),
+      dplyr::mutate(!!rlang::sym(main_date_var[i]) := dplyr::if_else(!is.na(!!rlang::sym(main_date_var[i])),
                                                        !!rlang::sym(main_date_var[i]),
                                                        !!rlang::sym(other_date_var[i])))
   }
