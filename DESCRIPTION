@@ -16,6 +16,7 @@ Imports:
     httr,
     jsonlite,
     lubridate,
+    magrittr,
     readxl,
     rlang,
     stringi,
