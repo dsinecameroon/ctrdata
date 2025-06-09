@@ -1,13 +1,23 @@
 Package: ctrdata
-Title: What the Package Does (One Line, Title Case)
+Title: Cameroon Trauma Registry Data Management
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Roland", "Mfondoum", , "dsinecameroon@gmail.com", role = c("aut", "cre"))
+Description: This package was designed to interect with the Cameroon Trauma Registry Data.
+License: `use_mit_license()`, `use_gpl3_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 URL: https://github.com/VOICE-TONE/ctrdata
 BugReports: https://github.com/VOICE-TONE/ctrdata/issues
+Imports: 
+    data.table,
+    dplyr,
+    httr,
+    jsonlite,
+    lubridate,
+    readxl,
+    rlang,
+    stringi,
+    stringr,
+    writexl
