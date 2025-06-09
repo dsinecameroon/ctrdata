@@ -1,5 +1,14 @@
 #' Load CTR data between two dates.
 #'
+#' @examples
+#' box_path = "~/Box/DMAC/Data Anonymized/"
+#'
+#' df <- ctr_data_loader(
+#'   path = box_path,
+#'   start_date = "2025-05-01",
+#'   end_date = "2025-05-31"
+#' )
+#' head(df)
 #'
 #' @export
 #' @param path Root path where data is stored.

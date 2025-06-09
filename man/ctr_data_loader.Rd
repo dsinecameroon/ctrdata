@@ -19,3 +19,14 @@ A data frame of records between specified dates.
 \description{
 Load CTR data between two dates.
 }
+\examples{
+box_path = "~/Box/DMAC/Data Anonymized/"
+
+df <- ctr_data_loader(
+  path = box_path,
+  start_date = "2025-05-01",
+  end_date = "2025-05-31"
+)
+head(df)
+
+}
