@@ -38,8 +38,8 @@ ctr_dates_reconciliation <- function(data) {
 
   # Step 3: Reconcile each timestamp with its archival version (if NA or blank)
   for (i in seq_along(main_date_var)) {
-    original <- sym(main_date_var[i])
-    fallback <- sym(paste(main_date_var[i], "arch", sep = "_"))
+    original <- rlang::sym(main_date_var[i])
+    fallback <- rlang::sym(paste(main_date_var[i], "arch", sep = "_"))
 
     data <- data %>%
       dplyr::mutate(
