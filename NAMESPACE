@@ -3,6 +3,7 @@
 export("%>%")
 export(create_path)
 export(ctr_data_loader)
+export(ctr_dates_reconciliation)
 export(label_data)
 export(rc_config)
 export(rc_export_fields_name)

@@ -39,5 +39,4 @@ Assumes timestamp format is \verb{\%Y-\%m-\%d \%H:\%M:\%S}.
 redcap_data <- rc_export_records()
 reconciled <- ctr_dates_reconciliation(redcap_data)
 }
-
 }

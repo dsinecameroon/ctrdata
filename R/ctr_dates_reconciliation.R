@@ -26,7 +26,7 @@
 #' redcap_data <- rc_export_records()
 #' reconciled <- ctr_dates_reconciliation(redcap_data)
 #' }
-#'
+#'@export
 ctr_dates_reconciliation <- function(data) {
   # Step 1: Identify main timestamp fields
   pattern <- "(?<=timestamp$)"
