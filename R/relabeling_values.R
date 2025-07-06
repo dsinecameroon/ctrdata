@@ -6,7 +6,7 @@
 #' @param choices_list A named list of value-label pair data.frames.
 #' @param lang Language column to use for relabeling. Default is both French and English.
 #' @return Data frame with relabeled values.
-relabeling_values_ctr_df <- function(df, choices_list, lang=c("french", "english")){
+label_data <- function(df, choices_list, lang=c("french", "english")){
   print("filtering complete")
 
   for(nam in names(choices_list)){
