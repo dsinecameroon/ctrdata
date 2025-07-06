@@ -2,31 +2,44 @@
 % Please edit documentation in R/ctr_data_loader.R
 \name{ctr_data_loader}
 \alias{ctr_data_loader}
-\title{Load CTR data between two dates.}
+\title{Load CTR Data from Google Box Folder Between Two Dates}
 \usage{
-ctr_data_loader(path = ".", start_date = NULL, end_date = NULL)
+ctr_data_loader(box_root = ".", start_date = NULL, end_date = NULL)
 }
 \arguments{
-\item{path}{Root path where data is stored.}
+\item{box_root}{A string representing the root directory where the Google Box folder is mounted or synced locally.
+For example, \code{"~/Box"} or \code{"C:/Users/username/Box"}. The function will look inside
+\verb{box_root/DMAC/Data Anonymized/} for year/month folders containing \code{data_anon.xlsx} files.}
 
-\item{start_date}{Start date in yyyy-mm-dd format.}
+\item{start_date}{Optional start date (\code{"yyyy-mm-dd"}). Only records on or after this date will be included.}
 
-\item{end_date}{End date in yyyy-mm-dd format.}
+\item{end_date}{Optional end date (\code{"yyyy-mm-dd"}). Only records on or before this date will be included.}
 }
 \value{
-A data frame of records between specified dates.
+A data frame combining and filtering records across all relevant months within the given date range.
+If no date range is provided, all records found in subfolders are returned.
 }
 \description{
-Load CTR data between two dates.
+Loads CTR data stored in a Google Box folder hierarchy structured as \verb{DMAC/Data Anonymized/YYYY/MM/}.
+If no dates are provided, it loads all available data files. If a date range is provided, it filters
+based on folder paths and further restricts rows based on the \code{date_survey} column.
+}
+\details{
+The function assumes the following folder structure within the Box folder:
+\verb{box_root/DMAC/Data Anonymized/YYYY/MM/data_anon.xlsx}
+\itemize{
+\item If \code{start_date} and \code{end_date} are not provided, the function loads all files matching \code{"data_anon.xlsx"} recursively.
+\item If dates are provided, only files in matching year/month folders will be considered.
+\item After loading, rows are filtered by the \code{date_survey} column.
+}
+
+Requires the helper function \code{temp_loader()} which must read a file path and return a data frame.
 }
 \examples{
-box_path = "~/Box/DMAC/Data Anonymized/"
-
-df <- ctr_data_loader(
-  path = box_path,
-  start_date = "2025-05-01",
-  end_date = "2025-05-31"
-)
-head(tibble::as_tibble(df))
+\dontrun{
+ctr_data_loader(box_root = "~/Box", start_date = "2023-01-01", end_date = "2023-03-31")
+ctr_data_loader(box_root = "C:/Users/myuser/Box", start_date = "2024-01-01", end_date = "2024-06-30")
+ctr_data_loader(box_root = "~/Box")  # Load all data
+}
 
 }

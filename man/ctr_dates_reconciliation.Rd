@@ -2,18 +2,42 @@
 % Please edit documentation in R/ctr_dates_reconciliation.R
 \name{ctr_dates_reconciliation}
 \alias{ctr_dates_reconciliation}
-\title{Reconcile multiple timestamp fields to create a unified date_survey column.}
+\title{Reconcile and Standardize REDCap Timestamp Fields}
 \usage{
-ctr_dates_reconciliation(data, date_field)
+ctr_dates_reconciliation(data)
 }
 \arguments{
-\item{data}{Data frame with timestamp fields.}
-
-\item{date_field}{Main date field for reference.}
+\item{data}{A data frame returned from a REDCap API call, containing timestamp fields.}
 }
 \value{
-Data frame with unified date_survey column.
+A data frame with:
+\itemize{
+\item All original columns (with timestamps coerced to \code{POSIXct})
+\item Reconciled timestamp fields using \verb{_arch} versions where applicable
+\item A new column \code{date_survey} representing the latest non-missing timestamp
+\item Columns reordered with \code{record_id} and \code{date_survey} first
+}
 }
 \description{
-Reconcile multiple timestamp fields to create a unified date_survey column.
+This function identifies all timestamp-related columns in a REDCap dataset, attempts to reconcile
+missing or alternative values using archival versions, and creates a unified \code{date_survey} field
+representing the most relevant date per record.
+}
+\details{
+\itemize{
+\item Timestamp columns are detected by matching names that end with \code{"timestamp"}.
+\item For each such field, if the value is \code{NA} or blank, the function checks for an archival version
+named like \code{"fieldname_timestamp_arch"} and uses that instead.
+\item The new \code{date_survey} column holds the latest (\code{max}) timestamp value across all primary and archival
+timestamp fields per row.
+}
+
+Assumes timestamp format is \verb{\%Y-\%m-\%d \%H:\%M:\%S}.
+}
+\examples{
+\dontrun{
+redcap_data <- rc_export_records()
+reconciled <- ctr_dates_reconciliation(redcap_data)
+}
+
 }
