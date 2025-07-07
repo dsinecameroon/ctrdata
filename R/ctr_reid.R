@@ -32,13 +32,13 @@ ctr_data_reid <- function(box_path, data){
   ids_files = list.files(ids_path, full.names = TRUE)
 
   ids_map <- lapply(ids_files, temp_loader)
-  ids_map <- bind_rows(ids_map)
+  ids_map <- dplyr::bind_rows(ids_map)
 
-  filetered_ids <- ids_map %>% filter(id %in% data$id)
+  filetered_ids <- ids_map %>% dplyr::filter(id %in% data$id)
 
   data <- data %>%
-    left_join(filetered_ids, by = "id") %>%
-    relocate(record_id, unique_ctr_id, .after = "id")
+    dplyr::left_join(filetered_ids, by = "id") %>%
+    dplyr::relocate(record_id, unique_ctr_id, .after = "id")
 
   return(data)
 }
