@@ -2,8 +2,8 @@
 
 export("%>%")
 export(create_path)
-export(ctr_Data_reid)
 export(ctr_data_loader)
+export(ctr_data_reid)
 export(ctr_dates_reconciliation)
 export(label_data)
 export(rc_config)

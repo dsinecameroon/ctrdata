@@ -26,7 +26,7 @@
 #' }
 #'
 #' @export
-ctr_Data_reid <- function(box_path, data){
+ctr_data_reid <- function(box_path, data){
   ids_path = paste0(box_path, "DMAC/Data Anonymized/IDs")
 
   ids_files = list.files(ids_path, full.names = TRUE)
