@@ -170,7 +170,9 @@ rc_export_single_record_label <- function(field_name, field_value) {
                          records = paste(record_id, collapse = ","),
                          rawOrLabel = "both",          # <-- this returns both raw and labels
                          rawOrLabelHeaders = "both",   # <-- includes both raw and label headers
-                         exportCheckboxLabel = "true"  # <-- ensures checkbox/dummies have labels
+                         exportCheckboxLabel = "true",  # <-- ensures checkbox/dummies have labels
+                         exportDataAccessGroups = "true",
+                         checkboxExportType = "both"
                        ),
                        encode = "form"
   )
@@ -183,3 +185,4 @@ rc_export_single_record_label <- function(field_name, field_value) {
 
   return(full_record)
 }
+
