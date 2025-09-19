@@ -34,7 +34,7 @@ ctr_data_reid <- function(box_path, data){
   ids_map <- lapply(ids_files, temp_loader)
   ids_map <- dplyr::bind_rows(ids_map)
 
-  filetered_ids <- ids_map %>% dplyr::filter(id %in% data$id)
+  filetered_ids <<- ids_map %>% dplyr::filter(id %in% data$id)
 
   data <- data %>%
     dplyr::left_join(filetered_ids, by = "id") %>%

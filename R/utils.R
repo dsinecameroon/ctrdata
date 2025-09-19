@@ -7,7 +7,13 @@
 #' @return A data.frame.
 temp_loader <- function(path, ...){
   temp_path <- tempfile(fileext = ".xlsx")
-  file.copy(path, temp_path, overwrite = TRUE)
+
+  # Check if it exists
+  if (file.exists(path)) {
+    file.copy(path, temp_path, overwrite = TRUE)
+  } else {
+    print(paste("File", path, "does not exist."))
+  }
   print(paste("Reading", path))
   data <- readxl::read_excel(temp_path, ...)
   unlink(temp_path)
