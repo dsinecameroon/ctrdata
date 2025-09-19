@@ -1,3 +1,4 @@
+library(shiny)
 # X-ray updates
 updateRadioButtons(session, "radio_xray_head", selected = df$radio_xray_head)
 updateRadioButtons(session, "radio_xray_neck", selected = df$radio_xray_neck)
