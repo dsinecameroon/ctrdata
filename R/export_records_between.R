@@ -25,10 +25,11 @@
 #' rc_export_records_between(start_date = "2024-01-01", end_date = "2024-03-31")
 #'
 #' @export
-rc_export_records_between <- function(record_id = 'record_id', start_date, end_date) {
+rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, end_date=NULL) {
   # Retrieve API configuration
   api_url <- Sys.getenv("RC_API_URL", unset = NA)
   api_token <- Sys.getenv("RC_API_TOKEN", unset = NA)
+  origin <- "2022-06-09"
 
   if (is.na(api_url) || is.na(api_token) || api_url == "" || api_token == "") {
     stop("REDCap API configuration missing. Use rc_config(api_url, api_token) first.")
@@ -57,27 +58,53 @@ rc_export_records_between <- function(record_id = 'record_id', start_date, end_d
     data[[d]] <- as.Date(data[[d]], format = "%Y-%m-%d")
   }
 
+  data <- suppressWarnings(ctr_dates_reconciliation(data = data))
+
+  # Dealing with date entries
+  if(is.null(start_date))
+    start_date <- origin
+
+  if(is.null(end_date))
+    end_date <- lubridate::today()
+
   start_date <- as.Date(start_date)
   end_date <- as.Date(end_date)
 
-  data <- suppressWarnings(ctr_dates_reconciliation(data = data))
+  if(end_date < start_date)
+    stop("Error: The end date is before the start date.")
 
   filtered_data <- subset(data, data[["date_survey"]] >= start_date & data[["date_survey"]] <= end_date)
 
   # Step 3: Extract full records for those filtered
-  result <- httr::POST(api_url,
-                       body = list(
-                         token = api_token,
-                         content = 'record',
-                         format = 'json',
-                         type = 'flat',
-                         records = paste(filtered_data$record_id, collapse = ","),
-                         exportSurveyFields = 'true'
-                       ),
-                       encode = "form"
-  )
 
-  data <- jsonlite::fromJSON(httr::content(result, as = "text", encoding = "UTF-8"))
+  record_ids <- sort(as.numeric(filtered_data$record_id))
+  block_size <- 5000
+  record_list <- split(record_ids, ceiling(seq_along(record_ids) / block_size))
+
+  result_list <- lapply(record_list, \(recs)
+
+                        httr::POST(api_url,
+                                   body = list(
+                                     token = api_token,
+                                     content = 'record',
+                                     format = 'json',
+                                     type = 'flat',
+                                     records = paste(recs, collapse = ","),
+                                     exportSurveyFields = 'true'
+                                   ),
+                                   encode = "form"
+                        )
+                        )
+
+
+
+
+
+  data_list <- lapply(result_list,\(result)
+                 jsonlite::fromJSON(httr::content(result, as = "text", encoding = "UTF-8")))
+  # Merge all
+  data <- rbind(data_list)
+
   data <- suppressWarnings(ctr_dates_reconciliation(data = data))
 
   data <- data[, names(data)[!grepl("prectr|ctr_login|redcap",names(data))]]
