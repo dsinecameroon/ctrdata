@@ -81,9 +81,10 @@ rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, 
   block_size <- 5000
   record_list <- split(record_ids, ceiling(seq_along(record_ids) / block_size))
 
-  result_list <- lapply(record_list, \(recs)
+  result_list <- lapply(record_list, function(recs){
 
-                        httr::POST(api_url,
+                        print(paste("Extracting records between", min(recs), "and", max(recs)))
+                        res <- httr::POST(api_url,
                                    body = list(
                                      token = api_token,
                                      content = 'record',
@@ -94,6 +95,12 @@ rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, 
                                    ),
                                    encode = "form"
                         )
+
+                        print(paste("Records", min(recs),  "to", max(recs), "extracted."))
+                        return(res)
+
+                        }
+
                         )
 
 
@@ -103,7 +110,7 @@ rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, 
   data_list <- lapply(result_list,\(result)
                  jsonlite::fromJSON(httr::content(result, as = "text", encoding = "UTF-8")))
   # Merge all
-  data <- rbind(data_list)
+  data <- data.table::rbindlist(data_list, fill = T)
 
   data <- suppressWarnings(ctr_dates_reconciliation(data = data))
 
