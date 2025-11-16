@@ -5,6 +5,9 @@
 #' function `rc_timestamp_var()` to detect timestamp fields and assumes a `date_survey` column is created
 #' or standardized via `ctr_dates_reconciliation()`.
 #'
+#' If no parameters are provided, the function will export **all records in the REDCap project**.
+#' This may take a long time depending on your internet speed and computer performance.
+#'
 #' @param record_id A string indicating the name of the record ID field. Default is `'record_id'`.
 #' @param start_date The start date (inclusive) in `"YYYY-MM-DD"` format.
 #' @param end_date The end date (inclusive) in `"YYYY-MM-DD"` format.
@@ -17,13 +20,22 @@
 #' 2. Filters records between `start_date` and `end_date` based on `date_survey`.
 #' 3. Fetches the full record data for only the matching records.
 #'
+#' If `start_date` and `end_date` are omitted, **the entire REDCap database is downloaded**.
+#' This feature is helpful for full project extraction but may require several minutes for large databases.
+#'
 #' Environment variables `RC_API_URL` and `RC_API_TOKEN` must be set before calling this function.
 #' Timestamps must be parsable as `Date` objects.
 #'
 #' @examples
+#' # Configure REDCap connection
 #' rc_config("https://redcap.your.org/api/", "XYZ123TOKEN")
+#'
+#' # Export records between two dates
 #' rc_export_records_between(start_date = "2024-01-01", end_date = "2024-03-31")
 #'
+#' # Export the full REDCap database (may be slow)
+#' data <- rc_export_records_between()
+
 #' @export
 rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, end_date=NULL) {
   # Retrieve API configuration
