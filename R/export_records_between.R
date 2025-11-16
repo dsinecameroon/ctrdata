@@ -114,7 +114,7 @@ rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, 
 
   data <- suppressWarnings(ctr_dates_reconciliation(data = data))
 
-  data <- data[, names(data)[!grepl("prectr|ctr_login|redcap",names(data))]]
+  data <- subset(data, select = names(data)[!grepl("prectr|ctr_login|redcap",names(data))])
 
   return(data)
 }
