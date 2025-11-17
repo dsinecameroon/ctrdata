@@ -209,27 +209,38 @@ rc_export_records_between_label <- function(record_id = 'record_id', start_date,
 
   filtered_data <- subset(data, data[["date_survey"]] >= start_date & data[["date_survey"]] <= end_date)
 
+  record_ids <- sort(as.numeric(filtered_data$record_id))
+  block_size <- 5000
+  record_list <- split(record_ids, ceiling(seq_along(record_ids) / block_size))
+
+
   # Step 3: Extract full records for those filtered
-  result <- httr::POST(api_url,
-                       body = list(
-                         token = api_token,
-                         content = 'record',
-                         format = 'json',
-                         type = 'flat',
-                         records = paste(filtered_data$record_id, collapse = ","),
-                         exportSurveyFields = 'true',
-                         rawOrLabel = "both",          # <-- this returns both raw and labels
-                         rawOrLabelHeaders = "both",   # <-- includes both raw and label headers
-                         exportCheckboxLabel = "true"  # <-- ensures checkbox/dummies have labels
+  result_list <- lapply(record_list, function(recs){
 
-                       ),
-                       encode = "form"
-  )
+    httr::POST(api_url,
+               body = list(
+               token = api_token,
+               content = 'record',
+               format = 'json',
+               type = 'flat',
+               records = paste(recs, collapse = ","),
+               exportSurveyFields = 'true',
+               rawOrLabel = "label",          # <-- this returns both raw and labels
+               # rawOrLabelHeaders = "raw",   # <-- includes both raw and label headers
+               exportCheckboxLabel = "false"  # <-- ensures checkbox/dummies have labels
+               ),
+               encode = "form")
+    })
 
-  data <- jsonlite::fromJSON(httr::content(result, as = "text", encoding = "UTF-8"))
+
+  data_list <- lapply(result_list,\(result)
+                      jsonlite::fromJSON(httr::content(result, as = "text", encoding = "UTF-8")))
+  # Merge all
+  data <- data.table::rbindlist(data_list, fill = T)
+
   data <- suppressWarnings(ctr_dates_reconciliation(data = data))
 
-  data <- data[, names(data)[!grepl("prectr|ctr_login|redcap",names(data))]]
+  data <- subset(data, select = names(data)[!grepl("prectr|ctr_login|redcap",names(data))])
 
   return(data)
 }
