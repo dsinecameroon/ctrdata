@@ -4,7 +4,11 @@
 \alias{rc_export_records_between}
 \title{Export REDCap Records Within a Date Range}
 \usage{
-rc_export_records_between(record_id = "record_id", start_date, end_date)
+rc_export_records_between(
+  record_id = "record_id",
+  start_date = NULL,
+  end_date = NULL
+)
 }
 \arguments{
 \item{record_id}{A string indicating the name of the record ID field. Default is \code{'record_id'}.}
@@ -23,6 +27,9 @@ function \code{rc_timestamp_var()} to detect timestamp fields and assumes a \cod
 or standardized via \code{ctr_dates_reconciliation()}.
 }
 \details{
+If no parameters are provided, the function will export \strong{all records in the REDCap project}.
+This may take a long time depending on your internet speed and computer performance.
+
 This function performs three steps:
 \enumerate{
 \item Retrieves record IDs and timestamp fields using \code{rc_timestamp_var()}.
@@ -30,11 +37,19 @@ This function performs three steps:
 \item Fetches the full record data for only the matching records.
 }
 
+If \code{start_date} and \code{end_date} are omitted, \strong{the entire REDCap database is downloaded}.
+This feature is helpful for full project extraction but may require several minutes for large databases.
+
 Environment variables \code{RC_API_URL} and \code{RC_API_TOKEN} must be set before calling this function.
 Timestamps must be parsable as \code{Date} objects.
 }
 \examples{
+# Configure REDCap connection
 rc_config("https://redcap.your.org/api/", "XYZ123TOKEN")
+
+# Export records between two dates
 rc_export_records_between(start_date = "2024-01-01", end_date = "2024-03-31")
 
+# Export the full REDCap database (may be slow)
+data <- rc_export_records_between()
 }

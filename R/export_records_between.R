@@ -37,6 +37,7 @@
 #' data <- rc_export_records_between()
 
 #' @export
+
 rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, end_date=NULL) {
   # Retrieve API configuration
   api_url <- Sys.getenv("RC_API_URL", unset = NA)
@@ -193,13 +194,13 @@ rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, 
 #'   \code{\link{ctr_dates_reconciliation}}
 #'
 #' @export
-#'
+
 rc_export_records_between_with_groups <- function(record_id = 'record_id', start_date=NULL, end_date=NULL) {
 
   # Retrieve API configuration
   api_url <- Sys.getenv("RC_API_URL", unset = NA)
   api_token <- Sys.getenv("RC_API_TOKEN", unset = NA)
-  origin <- "2022-06-01"
+  origin <- "2022-06-01" # setting origin
 
   if (is.na(api_url) || is.na(api_token) || api_url == "" || api_token == "") {
     stop("REDCap API configuration missing. Use rc_config(api_url, api_token) first.")
