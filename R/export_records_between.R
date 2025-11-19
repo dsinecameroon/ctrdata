@@ -166,17 +166,18 @@ rc_export_records_between <- function(record_id = 'record_id', start_date=NULL, 
 #' rc_config("https://redcap.your.org/api/", "XYZ123TOKEN")
 #'
 #' # Export records between two dates
-#' rc_export_records_between(start_date = "2024-01-01", end_date = "2024-03-31")
+#' rc_export_records_between_with_groups(start_date = "2024-01-01", end_date = "2024-03-31")
 #'
 #' # Export the full REDCap database (may be slow)
-#' data <- rc_export_records_between()
+#' data <- rc_export_records_between_with_groups()
 
 #' @export
 rc_export_records_between_with_groups <- function(record_id = 'record_id', start_date=NULL, end_date=NULL) {
+
   # Retrieve API configuration
   api_url <- Sys.getenv("RC_API_URL", unset = NA)
   api_token <- Sys.getenv("RC_API_TOKEN", unset = NA)
-  origin <- "2022-06-09"
+  origin <- "2022-06-01"
 
   if (is.na(api_url) || is.na(api_token) || api_url == "" || api_token == "") {
     stop("REDCap API configuration missing. Use rc_config(api_url, api_token) first.")
